@@ -80,7 +80,7 @@ const Image = styled.img`
 `;
 
 type Props = {
-    id: string;
+    id: string | number;
     name?: string;
     types?: Array<Type>;
     color?: Color;

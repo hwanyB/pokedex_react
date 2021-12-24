@@ -50,36 +50,39 @@ const GaugeWrapper = styled.div`
   background-color: #e5e7eb;
 `;
 
-const Gauge = styled.div<{ color: string }>` 
+const Gauge = styled.div<{ percentage: number; color: string }>` 
   background-color: ${({ color }) => color};
-  
+  width: ${({ percentage }) => `${percentage}%`};
   height: 100%;
   border-radius: 12px;
-`;//percentage: number;width: ${({ percentage }) => `${percentage}%`};
+`;
 
-interface Props{
+type Props = {
+    isLoading: boolean;
     stats?: Array<Stat>;
     color?: Color;
 }
 
 
-const Stats:React.FC<Props> = ({ stats, color }) => {
-    return(
+const Stats:React.FC<Props> = ({ stats, color }) => (
         <Base>
             <Title color={mapColorToHex(color?.name)}>Base Stats</Title>
             <List>
-                <ListItem>
-                    <Name>name</Name>
-                    <Amount>amount</Amount>
+                {
+                  stats?.map(({ stat, base_stat }, idx) => (
+                    <ListItem key={idx}>
+                    <Name>{stat.name === 'hp' ? stat.name.toUpperCase : stat.name}</Name>
+                    <Amount>{base_stat}</Amount>
                     <GaugeWrapper>
-                        <Gauge color={mapColorToHex(color?.name)} />
+                        <Gauge percentage={(base_stat / 255) * 100} color={mapColorToHex(color?.name)} />
                     </GaugeWrapper>
                 </ListItem>
+                  ))
+                }
             </List>
         
         </Base>
         
     )
-}
 
 export default Stats;

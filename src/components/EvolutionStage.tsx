@@ -55,14 +55,15 @@ const EvolutionStage: React.FC<Props> = ({ level, color }) => {
     return(
         <Base>
             <ImageWrapper>
-                <Image />
+              <Image src={''} />
             </ImageWrapper>
             <DividerWrapper>
-                <Text color={mapColorToHex(color?.name)} />
+              {level && <Text color={mapColorToHex(color?.name)}>{`Level ${level}`}</Text>}
                 <Divider />
+                
             </DividerWrapper>
             <ImageWrapper>
-                <Image />
+                <Image src={''} />
             </ImageWrapper>
         </Base>
     )

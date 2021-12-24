@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { mapTypeToHex } from "../utils";
+import { mapTypeToHex, mapColorToHex } from "../utils";
 import Abilities from "./Abilities";
 
 const Base = styled.div`
@@ -77,12 +77,12 @@ const InfoItemValue = styled.span<{ color: string }>`
     font-size: 12px;
 `;
 
-interface Props {
+type Props = {
     isLoading: boolean;
     color?: Color;
-    growthRate?: string;
+    growthRate?: any;
     flavorText?: string;
-    genderRate?: number;
+    genderRate?: any;
     isLegendary?: boolean;
     isMythical?: boolean;
     types? :Array<Type>;
@@ -104,14 +104,21 @@ const About: React.FC<Props> = ({
     weight,
     height,
     baseExp,
-    abilities }) => {
+    abilities, }) => {
     
     const rarity = isLegendary ? 'Legendary' : isMythical ? 'Mythical' : 'Normal';
 
         return(
         <Base>
             <FlavorText>{flavorText}</FlavorText>
-            <TypeList>
+            {
+                isLoading ? (
+                    <ImageWrapper>
+                        <Image src="/assets/loading.gif" />
+                    </ImageWrapper>
+                ) : (
+                    <>
+                    <TypeList>
                 {
                     types?.map(({ type }, idx) => (
                         <TypeWrapper key={idx} color={mapTypeToHex(type.name)}>
@@ -122,37 +129,41 @@ const About: React.FC<Props> = ({
                 }
             </TypeList>
             <InfoContainerWrapper>
-                <Title color={mapTypeToHex(color?.name)}>Pokédex Data</Title>
+                <Title color={mapColorToHex(color?.name)}>Pokédex Data</Title>
                 <InfoConainer>
                     <InfoItem>
                         <InfoItemLabel>Height</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{height}</InfoItemValue>
+                        {height && <InfoItemValue color={mapColorToHex(color?.name)}>{height / 10}m</InfoItemValue>}
                     </InfoItem>
                     <InfoItem>
                         <InfoItemLabel>Weight</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{weight}</InfoItemValue>
+                        {weight && <InfoItemValue color={mapColorToHex(color?.name)}>{weight / 10}kg</InfoItemValue>}
                     </InfoItem>
                     <InfoItem>
                         <InfoItemLabel>Gender</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{genderRate === -1 ? 'Unknown' : 'Male / Female'}</InfoItemValue>
+                        {genderRate && <InfoItemValue color={mapColorToHex(color?.name)}>{genderRate === -1 ? 'Unknown' : 'Male / Female'}</InfoItemValue>}
                     </InfoItem>
                     <InfoItem>
                         <InfoItemLabel>Growth Rate</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{growthRate}</InfoItemValue>
+                        {growthRate && <InfoItemValue color={mapColorToHex(color?.name)}>{growthRate}</InfoItemValue>}
                     </InfoItem>
                     <InfoItem>
                         <InfoItemLabel>Base Exp</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{baseExp}</InfoItemValue>
+                        {baseExp && <InfoItemValue color={mapColorToHex(color?.name)}>{baseExp}</InfoItemValue>}
                     </InfoItem>
                     <InfoItem>
                         <InfoItemLabel>Rarity</InfoItemLabel>
-                        <InfoItemValue color={mapTypeToHex(color?.name)}>{rarity}</InfoItemValue>
+                        {rarity && <InfoItemValue color={mapTypeToHex(color?.name)}>{rarity}</InfoItemValue>}
                     </InfoItem>
                 </InfoConainer>
             </InfoContainerWrapper>
-            {abilities && <Abilities abilities={abilities} />}
+            {abilities && <Abilities abilities={abilities} color={color} />}
+            </>
+                )
+            }
+            
         </Base>
     )
     }
 
-export default About;
+export default React.memo(About);

@@ -50,7 +50,7 @@ const Empty = styled.div<{ color: string }>`
   color: ${({ color }) => color};
 `;
 
-interface Props{
+type Props = {
     isLoading: boolean;
     id?: string;
     color?: Color;

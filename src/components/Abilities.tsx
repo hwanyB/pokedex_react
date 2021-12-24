@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled/macro";
-import { mapTypeToHex, mapColorToHex } from "../utils";
+import {  mapColorToHex } from "../utils";
+import useAbilities from "../hooks/useAbilities";
 
 const Base = styled.div`
     margin-top: 32px;
@@ -38,22 +39,32 @@ const Description = styled.span`
     word-wrap: break-word;
 `;
 
-interface Props {
+type Props = {
     abilities: Array<Ability>;
     color?: Color;
 
 }
 
-const Abilities: React.FC<Props> = ({ color }) => {
+const Abilities: React.FC<Props> = ({ color, abilities }) => {
+    const results = useAbilities(abilities); 
+    const getEffectEntry = (effectEntries: Array<EffectEntry>) => { // 영문 반환
+        return effectEntries.find(effectEntry => effectEntry.language.name === 'en') || effectEntries[0];
+      };
 
     return(
         <Base>
             <Title color={mapColorToHex(color?.name)}>Abilities</Title>
             <List>
-                <ListItem>
-                    <Label>Label</Label>
-                    <Description>Description</Description>
-                </ListItem>
+                {
+                    results.map(({ data }, idx ) => (
+                        data && (
+                        <ListItem key={idx}>
+                        <Label>{data.data.name}</Label>
+                        <Description>{getEffectEntry(data.data.effect_entries).effect}</Description>
+                    </ListItem>
+                        )
+                    ))
+                }
             </List>
         </Base>
     )

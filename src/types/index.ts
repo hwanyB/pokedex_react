@@ -126,7 +126,7 @@ type Sprites = {
     name: string;
     order: number;
     sprites: Sprites;
-    base_experience: number;
+    baseExp: number;
     height: number;
     weight: number;
     stats: Array<Stat>;

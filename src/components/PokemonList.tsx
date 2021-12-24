@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled/macro";
-import usePokemon from "../hooks/usePokemon";
+import usePokemonQuery from "../hooks/usePokemonQuery";
 
 const Base = styled.div`
   margin-top: 24px;
@@ -60,7 +60,7 @@ const Loading = styled.img`
 const getImageUrl = (index: number): string => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index}.png`;
 
 const PokemonList: React.FC = () => {
-  const { isLoading, isError, data } = usePokemon<ListResponse>();
+  const { isLoading, isError, data } = usePokemonQuery<ListResponse>();
   const formatNumbering = (index: number):string => {
     return `#${String(index).padStart(3, '0')}`;
   }
